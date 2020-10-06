@@ -1,0 +1,21 @@
+#!/bin/bash
+
+FILES=""
+
+# Iterate over every file staged for commit
+for FILE in $(git diff --cached --name-only -r HEAD)
+do
+	# Extract the file extension from the full name
+	FILENAME=$(basename "$FILE")
+	EXT="${FILENAME##*.}"
+
+	# Check if the file is a python file
+	if [ $EXT = "py" ]
+	then
+		FILES+=" $FILE"
+	fi
+done
+
+# Format the files
+isort -q $FILES
+black -q $FILES
