@@ -1,0 +1,74 @@
+call plug#begin('~/.vim/plugged')
+
+Plug 'airblade/vim-gitgutter' " Git integration
+Plug 'chriskempson/base16-vim' " 16 color theming
+Plug 'sheerun/vim-polyglot' " Syntax highlighting
+Plug 'christoomey/vim-tmux-navigator' " Shortcuts for navigating tmux windows
+Plug 'preservim/nerdtree' " File explorer
+
+call plug#end()
+
+" Use the base16 theme
+if filereadable(expand("~/.vimrc_background"))
+    let base16colorspace=256
+    source ~/.vimrc_background
+endif
+
+set nocompatible
+
+" Enable syntax highlighting
+syntax on
+
+" Use the system clipboard
+set clipboard=unnamedplus
+
+" Increase update rate
+set updatetime=250
+
+" Undo Stuff
+set noswapfile
+set nobackup
+set undodir=~/.vim/undodir
+set undofile
+
+" Don't wrap text
+set nowrap
+
+" Highlight the current line
+set cursorline
+
+" Enable Line Numbers
+set number
+
+" Set tab width
+set tabstop=4
+set shiftwidth=4
+set smarttab
+set expandtab
+
+" Enable mouse
+set mouse=a
+
+" Autocomplete with dictionary words when spell check is enabled
+set complete+=kspell
+
+" Enable spellchecking and linewrapping for Markdown and Latex documents
+au BufRead,BufNewFile *.md setlocal textwidth=80
+au BufRead,BufNewFile *.md setlocal spell
+au BufRead,BufNewFile *.tex setlocal textwidth=80
+au BufRead,BufNewFile *.tex setlocal spell
+
+" Stop line numbers from being displayed in terminals
+au TermOpen * setlocal nonumber norelativenumber
+
+" An easy way to open the file explorer
+nnoremap <leader>pv :NERDTree<CR>
+
+" Use escape to enter normal mode from terminal mode
+tnoremap <Esc> <C-\><C-n>
+
+set splitbelow
+set splitright
+
+" Italicize comments
+highlight Comment cterm=italic
