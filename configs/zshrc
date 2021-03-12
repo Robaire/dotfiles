@@ -11,8 +11,14 @@ plugins=(git cargo rust rustup)
 
 source $ZSH/oh-my-zsh.sh
 
+# Add programs to PATH
+path+="/home/robaire/.cargo/bin"
+export PATH
+
 # Aliases
 alias vim="nvim"
 alias zshconfig="nvim ~/.zshrc"
 alias open="xdg-open"
 alias python="python3"
+alias update="sudo apt update && apt list --upgradable"
+alias upgrade="sudo apt upgrade -y"
