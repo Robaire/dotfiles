@@ -53,9 +53,9 @@ set mouse=a
 set complete+=kspell
 
 " Enable spellchecking and linewrapping for Markdown and Latex documents
-au BufRead,BufNewFile *.md setlocal textwidth=80
+au BufRead,BufNewFile *.md setlocal wrap linebreak textwidth=0
 au BufRead,BufNewFile *.md setlocal spell
-au BufRead,BufNewFile *.tex setlocal textwidth=80
+au BufRead,BufNewFile *.tex setlocal wrap linebreak textwidth=0
 au BufRead,BufNewFile *.tex setlocal spell
 
 " Stop line numbers from being displayed in terminals
@@ -72,3 +72,7 @@ set splitright
 
 " Italicize comments
 highlight Comment cterm=italic
+
+" Change the highlight color for spellcheck
+highlight clear SpellBad
+highlight SpellBad cterm=undercurl ctermfg=3
