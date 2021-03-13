@@ -5,6 +5,7 @@ Plug 'chriskempson/base16-vim' " 16 color theming
 Plug 'sheerun/vim-polyglot' " Syntax highlighting
 Plug 'christoomey/vim-tmux-navigator' " Shortcuts for navigating tmux windows
 Plug 'preservim/nerdtree' " File explorer
+Plug 'rust-lang/rust.vim' " Rust syntax support (maybe unnecessary?)
 
 call plug#end()
 
@@ -61,11 +62,21 @@ au BufRead,BufNewFile *.tex setlocal spell
 " Stop line numbers from being displayed in terminals
 au TermOpen * setlocal nonumber norelativenumber
 
+" If Vim is started without file arguments open NERDTree
+au StdinReadPre * let s:std_in=1
+au VimEnter * if argc() == 0 && !exists('s:std_in') | NERDTree | endif
+
 " An easy way to open the file explorer
 nnoremap <leader>pv :NERDTree<CR>
 
 " Use escape to enter normal mode from terminal mode
-tnoremap <Esc> <C-\><C-n>
+tnoremap <Esc> <C-\><C-N>
+
+" Provide window navigation from terminal mode without switching modes
+tnoremap <C-J> <C-\><C-N><C-W><C-J>
+tnoremap <C-K> <C-\><C-N><C-W><C-K>
+tnoremap <C-L> <C-\><C-N><C-W><C-L>
+tnoremap <C-H> <C-\><C-N><C-W><C-H>
 
 set splitbelow
 set splitright
