@@ -5,7 +5,9 @@ Plug 'chriskempson/base16-vim' " 16 color theming
 Plug 'sheerun/vim-polyglot' " Syntax highlighting
 Plug 'christoomey/vim-tmux-navigator' " Shortcuts for navigating tmux windows
 Plug 'preservim/nerdtree' " File explorer
-Plug 'rust-lang/rust.vim' " Rust syntax support (maybe unnecessary?)
+Plug 'neoclide/coc.nvim', {'branch': 'release'} " Autocompletion
+Plug 'vim-syntastic/syntastic' " Syntax checking
+Plug 'rust-lang/rust.vim' " Rust language support
 
 call plug#end()
 
@@ -24,7 +26,7 @@ syntax on
 set clipboard=unnamedplus
 
 " Increase update rate
-set updatetime=250
+set updatetime=300
 
 " Undo Stuff
 set noswapfile
@@ -50,14 +52,39 @@ set expandtab
 " Enable mouse
 set mouse=a
 
+" Syntastic configuration
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+let g:syntastic_loc_list_height = 5
+let g:syntastic_stl_format = "[%E{Errors: %e (%fe)}%B{, }%W{Warnings: %w (%fw)}]"
+
+highlight SyntasticWarning cterm=undercurl
+highlight SyntasticError cterm=undercurl ctermbg=1
+
 " Autocomplete with dictionary words when spell check is enabled
 set complete+=kspell
 
+" Use tab for trigger completion with characters ahead and navigate
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
 " Enable spellchecking and linewrapping for Markdown and Latex documents
-au BufRead,BufNewFile *.md setlocal wrap linebreak textwidth=0
-au BufRead,BufNewFile *.md setlocal spell
-au BufRead,BufNewFile *.tex setlocal wrap linebreak textwidth=0
-au BufRead,BufNewFile *.tex setlocal spell
+au BufRead,BufNewFile *.md setlocal spell wrap linebreak textwidth=0
+au BufRead,BufNewFile *.tex setlocal spell wrap linebreak textwidth=0
 
 " Stop line numbers from being displayed in terminals
 au TermOpen * setlocal nonumber norelativenumber
@@ -78,6 +105,7 @@ tnoremap <C-K> <C-\><C-N><C-W><C-K>
 tnoremap <C-L> <C-\><C-N><C-W><C-L>
 tnoremap <C-H> <C-\><C-N><C-W><C-H>
 
+" Natural splits
 set splitbelow
 set splitright
 
