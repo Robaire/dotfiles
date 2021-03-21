@@ -5,9 +5,11 @@ Plug 'chriskempson/base16-vim' " 16 color theming
 Plug 'sheerun/vim-polyglot' " Syntax highlighting
 Plug 'christoomey/vim-tmux-navigator' " Shortcuts for navigating tmux windows
 Plug 'preservim/nerdtree' " File explorer
+Plug 'preservim/tagbar' " Ctag explorer
 Plug 'neoclide/coc.nvim', {'branch': 'release'} " Autocompletion
 Plug 'vim-syntastic/syntastic' " Syntax checking
 Plug 'rust-lang/rust.vim' " Rust language support
+Plug 'rhysd/vim-clang-format'
 
 call plug#end()
 
