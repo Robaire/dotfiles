@@ -1,2 +1,1 @@
-# util
-A collection of useful utilities
+A collection of my standard system configurations.
