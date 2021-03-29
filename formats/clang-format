@@ -2,6 +2,9 @@
 BasedOnStyle: Mozilla
 AlwaysBreakAfterDefinitionReturnType: None
 AlwaysBreakAfterReturnType: None
+AllowShortLoopsOnASingleLine: True
+AllowShortBlocksOnASingleLine: Always
 BreakBeforeBraces: Attach
 IndentWidth: 4
 ColumnLimit: 100
+...
