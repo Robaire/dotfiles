@@ -3,17 +3,23 @@ export ZSH="/home/robaire/.oh-my-zsh"
 
 # ZSH Config
 ZSH_THEME="minimal"
-HYPHEN_INSENSITIVE="true"
-DISABLE_AUTO_UPDATE="true"
+HYPHEN_INSENSITIVE=true
+DISABLE_AUTO_UPDATE=true
+
+ZSH_TMUX_AUTOSTART=true
+ZSH_TMUX_AUTOCONNECT=false
+
+BASE16_SHELL="$HOME/.config/base16-shell/"
+[ -n "$PS1" ] && \
+    [ -s "$BASE16_SHELL/profile_helper.sh" ] && \
+        eval "$("$BASE16_SHELL/profile_helper.sh")"
 
 # Plugins
-plugins=(git cargo rust rustup)
-
+plugins=(tmux git cargo)
 source $ZSH/oh-my-zsh.sh
 
-# Add programs to PATH
-path+="/home/robaire/.cargo/bin"
-export PATH
+# Environment Variables
+export EDITOR="nvim"
 
 # Aliases
 alias vim="nvim"
