@@ -1,35 +1,27 @@
 -- Load Plugins
 require('packer').startup(function()
-  use 'wbthomason/packer.nvim'
-  
+  use 'wbthomason/packer.nvim' -- Plugin Manager
   use 'neovim/nvim-lspconfig' -- LSP Configurations
-  use 'nvim-lua/completion-nvim' -- Completion engine using LSP
-  use 'onsails/lspkind-nvim' -- LSP Pictograms
-  
-  -- Base16 Themes
-  use 'chriskempson/base16-vim'
-  
-  use 'tpope/vim-vinegar'
-  use 'rhysd/vim-clang-format'
-  
-  -- Git Signs
   use {
-    'lewis6991/gitsigns.nvim',
-    requires = {'nvim-lua/plenary.nvim'}
+      'ms-jpq/coq_nvim', -- LSP Completion Engine
+      branch = 'coq',
+      requires = {
+          'ms-jpq/coq.artifacts',
+          branch = 'artifacts',
+      }
   }
-  
-  -- Fuzzy Finder
+  use 'chriskempson/base16-vim' -- Base16 Theme
+  use 'tpope/vim-vinegar' -- Directory Browser using netrw
   use {
-    'nvim-telescope/telescope.nvim',
-    requires = {{'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}}
+      'lewis6991/gitsigns.nvim', -- Git decorations
+      requires = {'nvim-lua/plenary.nvim'}
   }
-  
+  use {
+    'nvim-telescope/telescope.nvim', -- Fuzzy Finder
+    requires = {{'nvim-treesitter/nvim-treesitter'}, {'nvim-lua/plenary.nvim'}}
+  }
   use 'hoob3rt/lualine.nvim' -- Statusline
-  
-  use {
-    'robaire/nvim-tmux-navigator', -- Tmux navigator shortcuts
-    branch = 'dev'
-  }
+  use 'robaire/nvim-tmux-navigator' -- Tmux navigator shortcuts
 end)
 
 -- Configure Language Servers
@@ -102,8 +94,8 @@ highlight SpellBad cterm=undercurl ctermfg=3
 vim.api.nvim_command('au TermOpen * setlocal nonumber norelativenumber')
 
 -- Enable completion in all buffers
+vim.api.nvim_command('au BufEnter * COQnow -s')
 vim.api.nvim_set_keymap('i', '<Tab>', 'pumvisible() ? "<C-n>" : "<Tab>"', {noremap = true, expr = true})
 vim.api.nvim_set_keymap('i', '<S-Tab>', 'pumvisible() ? "<C-n>" : "<S-Tab>"', {noremap = true, expr = true})
-vim.api.nvim_command('au BufEnter * lua require\'completion\'.on_attach()')
 vim.api.nvim_command('set completeopt=menuone,noinsert,noselect')
 vim.api.nvim_command('set shortmess+=c')
