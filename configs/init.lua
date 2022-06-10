@@ -5,6 +5,9 @@ require('packer').startup(function()
   -- LSP Configurations
   use 'neovim/nvim-lspconfig' 
 
+  -- Treesitter
+  use 'nvim-treesitter/nvim-treesitter'
+
   -- Completion Engine
   use {
       'ms-jpq/coq_nvim',
@@ -36,7 +39,6 @@ require('packer').startup(function()
     requires = {
         {'nvim-lua/popup.nvim'}, 
         {'nvim-lua/plenary.nvim'},
-        {'nvim-treesitter/nvim-treesitter'}
     }
   }
   
@@ -60,6 +62,17 @@ lsp.html.setup{cmd = { "html-languageserver", "--stdio" }}
 lsp.tsserver.setup{}
 lsp.rust_analyzer.setup{}
 lsp.hls.setup{}
+
+-- Configure Treesitter
+require('nvim-treesitter.configs').setup{
+    ensure_installed = { "c", "cpp", "rust", "toml", "glsl", "javascript", "html", "markdown", "lua"},
+    sync_install = false,
+
+    highlight = {
+        enable = true,
+        additional_vim_regex_highlighting = false
+    }
+}
 
 -- Configure Rust Tools
 require('rust-tools').setup{}
@@ -92,6 +105,8 @@ vim.o.splitright = true
 vim.o.swapfile = false
 vim.o.backup = false
 vim.o.undofile = true
+vim.o.foldmethod = 'expr'
+vim.o.foldexpr = 'nvim_treesitter#foldexpr()'
 
 -- Context Specific Options
 vim.wo.number = true
