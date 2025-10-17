@@ -1,162 +1,64 @@
--- Load Plugins
-require('packer').startup(function()
-  use 'wbthomason/packer.nvim'
+-- Bootstrap Lazy
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable", -- latest stable release
+    lazypath,
+  })
+end
+vim.opt.rtp:prepend(lazypath)
 
-  -- LSP Configurations
-  use 'neovim/nvim-lspconfig' 
+-- Setup Plugins
+require("lazy").setup({
 
-  -- Treesitter
-  use 'nvim-treesitter/nvim-treesitter'
-
-  -- Completion Engine
-  use {
-      'ms-jpq/coq_nvim',
-      branch = 'coq',
-      requires = {
-          'ms-jpq/coq.artifacts',
-          branch = 'artifacts'
-      }
+  "nvim-treesitter/nvim-treesitter",
+  "neovim/nvim-lspconfig", -- LSP Configurations
+  {
+    'mrcjkb/rustaceanvim',
+    version = '^6', -- Recommended
+    lazy = false, -- This plugin is already lazy
+  },
+  "chriskempson/base16-vim", -- Base16 Themes
+  "nvim-lualine/lualine.nvim", -- Status Line
+  "lewis6991/gitsigns.nvim", -- Git Integration
+  {"ms-jpq/coq_nvim",
+    branch = "coq",
+	dependencies = {"ms-jpq/coq.artifacts", branch = "artifacts"}
   }
+})
 
-  -- File Explorer
-  use {
-      'ms-jpq/chadtree',
-      branch = 'chad'
-  }
-  
-  -- Base16 Themes
-  use 'chriskempson/base16-vim'
-
-  -- Git Signs
-  use {
-    'lewis6991/gitsigns.nvim',
-    requires = {'nvim-lua/plenary.nvim'}
-  }
-
-  -- Fuzzy Finder
-  use {
-    'nvim-telescope/telescope.nvim',
-    requires = {
-        {'nvim-lua/popup.nvim'}, 
-        {'nvim-lua/plenary.nvim'},
-    }
-  }
-  
-  use 'nvim-lualine/lualine.nvim' -- Statusline
-  
-  use {
-    'robaire/nvim-tmux-navigator', -- Tmux navigator shortcuts
-    branch = 'dev'
-  }
-
-  use 'simrat39/rust-tools.nvim' -- Rust LSP features
-end)
-
-
--- Configure Language Servers
-local lsp = require('lspconfig')
-lsp.cmake.setup{}
-lsp.clangd.setup{}
-lsp.pyright.setup{}
-lsp.html.setup{cmd = { "html-languageserver", "--stdio" }}
-lsp.tsserver.setup{}
-lsp.rust_analyzer.setup{}
-lsp.hls.setup{}
-
--- Configure Treesitter
-require('nvim-treesitter.configs').setup{
-    ensure_installed = { "c", "cpp", "rust", "toml", "glsl", "javascript", "html", "markdown", "lua"},
-    sync_install = false,
-
-    highlight = {
-        enable = true,
-        additional_vim_regex_highlighting = false
-    }
-}
-
--- Configure Rust Tools
-require('rust-tools').setup{}
-
-require('gitsigns').setup{}
-require('nvim-tmux-navigator').setup{}
-
--- Statusline Configuration
-require('lualine').setup{
+-- Plugin Specific Setup
+require("lualine").setup{
   options = {
     theme = 'gruvbox',
     icons_enabled = false
-  }
-}
-
--- General Options
-vim.o.compatible = false -- Disable compatiblity mode
-vim.o.number = true -- Show line numbers
-vim.o.cursorline = true -- Highlight the cursor line
-vim.o.clipboard = 'unnamedplus' -- Use the system clipboard
-vim.o.updatetime = 300 -- Increase update rate
-vim.o.wrap = false -- Disable line wrapping
-vim.o.tabstop = 4 -- Tab width
-vim.o.shiftwidth = 4
-vim.o.smarttab = true
-vim.o.expandtab = true
-vim.o.mouse = 'a' -- Enable mouse all the time
-vim.o.splitbelow = true
-vim.o.splitright = true
-vim.o.swapfile = false
-vim.o.backup = false
-vim.o.undofile = true
-vim.o.foldmethod = 'expr'
-vim.o.foldexpr = 'nvim_treesitter#foldexpr()'
-
--- Context Specific Options
-vim.wo.number = true
-vim.wo.wrap = false
-
--- Undo some conflicting keymappings from Coq
-vim.g.coq_settings = {
-    keymap = {
-        jump_to_mark = '',
-        bigger_preview = ''
     }
 }
 
--- Setting Theme
-vim.api.nvim_command([[
-if filereadable(expand("~/.vimrc_background"))
-    let base16colorspace=256
-    source ~/.vimrc_background
-endif
-]])
-
--- Enable spell checking and wrapping in certain files
-vim.api.nvim_command([[
-augroup SetSpell
-autocmd BufRead,BufNewFile *.md setlocal spell wrap linebreak textwidth=0
-autocmd BufRead,BufNewFile *.txt setlocal spell wrap linebreak textwidth=0
-augroup END
-]])
-
-vim.api.nvim_command([[
-highlight clear SpellBad
-highlight SpellBad cterm=undercurl ctermfg=3
-]])
-
--- Disable line numbers in terminal
-vim.api.nvim_command('au TermOpen * setlocal nonumber norelativenumber')
-
--- Use escape to enter normal mode from terminal mode
-vim.api.nvim_set_keymap('t', '<Esc>', '<C-\\><C-N>', {noremap = true, silent = true})
-
--- Provide window navigation from terminal mode without switching modes
-vim.api.nvim_set_keymap('t', '<C-J>', '<C-\\><C-N><C-W><C-J>', {noremap = true, silent = true})
-vim.api.nvim_set_keymap('t', '<C-K>', '<C-\\><C-N><C-W><C-K>', {noremap = true, silent = true})
-vim.api.nvim_set_keymap('t', '<C-L>', '<C-\\><C-N><C-W><C-L>', {noremap = true, silent = true})
-vim.api.nvim_set_keymap('t', '<C-H>', '<C-\\><C-N><C-W><C-H>', {noremap = true, silent = true})
+-- General Options
+vim.o.number = true
+vim.o.cursorline = true
+vim.o.wrap = false
+vim.o.autoindent = true
+vim.o.smarttab = true
+vim.o.expandtab = true
+vim.o.shiftwidth = 4
+-- vim.o.tabstop = 4
 
 -- Enable completion in all buffers
 vim.api.nvim_command('au BufEnter * COQnow -s')
-vim.api.nvim_command('set completeopt=menuone,noinsert,noselect')
-vim.api.nvim_command('set shortmess+=c')
-vim.api.nvim_set_keymap('i', '<Tab>', 'pumvisible() ? "<C-n>" : "<Tab>"', {noremap = true, expr = true})
-vim.api.nvim_set_keymap('i', '<S-Tab>', 'pumvisible() ? "<C-n>" : "<S-Tab>"', {noremap = true, expr = true})
 
+-- Enable text wrapping for markdown files
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "markdown",
+  callback = function()
+    vim.opt_local.wrap = true
+    vim.opt_local.spell = true
+    vim.opt_local.linebreak = true
+    vim.opt_local.textwidth = 80
+  end,
+})
